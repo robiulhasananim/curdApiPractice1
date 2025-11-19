@@ -53,3 +53,14 @@ def student_api(request):
 
         json_data = JSONRenderer().render(serializer.errors)
         return HttpResponse(json_data, content_type='application/json')
+    
+    if request.method =='DELETE':
+        json_data = request.body
+        stream = io.BytesIO(json_data)
+        pythondata = JSONParser().parse(stream)
+        id = pythondata.get('id')
+        stu = Student.objects.get(id=id)
+        stu.delete()
+        res = {'msg': 'Data Deleted !!'}
+        json_data = JSONRenderer().render(res)
+        return HttpResponse(json_data, content_type='application/json')
