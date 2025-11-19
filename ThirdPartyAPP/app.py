@@ -28,10 +28,13 @@ def post_data():
     json_data = json.dumps(data)
 
     r = requests.post(url=URL, data=json_data)
+    # print(r.text)
+    # print(r.status_code)
 
     data = r.json()
 
     print(data)
+
 
 post_data()
 

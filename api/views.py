@@ -1,12 +1,13 @@
 from django.shortcuts import render
 import io
 from rest_framework.parsers import JSONParser
-
+from django.views.decorators.csrf import csrf_exempt
 from api.models import Student
 from .serializers import StudentSerializer
 from rest_framework.renderers import JSONRenderer
 from django.http import HttpResponse
 
+@csrf_exempt
 def student_api(request):
     if request.method == 'GET':
         json_data = request.body
@@ -28,7 +29,7 @@ def student_api(request):
         stream = io.BytesIO(json_data)
         pythondata = JSONParser().parse(stream)
         serializer = StudentSerializer(data=pythondata)
-        if serializer.is_valid:
+        if serializer.is_valid():
             serializer.save()
             res = {'msg': 'Data Created'}
             json_data = JSONRenderer().render(res)
